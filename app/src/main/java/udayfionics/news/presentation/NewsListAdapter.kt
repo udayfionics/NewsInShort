@@ -7,17 +7,25 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import udayfionics.core.data.News
 import udayfionics.news.databinding.ItemNewsBinding
 
-class NewsListAdapter(private var newsList: List<News>) :
+class NewsListAdapter(private var list: ArrayList<News>) :
     Adapter<NewsListAdapter.NewsListViewHolder>() {
+
+    fun updateList(newList: List<News>) {
+        val existingDogsCount = list.size
+        list.clear()
+        notifyItemRangeRemoved(0, existingDogsCount)
+        list.addAll(newList)
+        notifyItemRangeInserted(0, list.size)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = NewsListViewHolder(
         ItemNewsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
     )
 
-    override fun getItemCount() = newsList.size
+    override fun getItemCount() = list.size
 
     override fun onBindViewHolder(holder: NewsListViewHolder, position: Int) {
-        holder.bind(newsList[position])
+        holder.bind(list[position])
     }
 
     inner class NewsListViewHolder(private var binding: ItemNewsBinding) :
