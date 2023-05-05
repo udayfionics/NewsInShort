@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/news_navigation"
+    app:startDestination="@id/newsListFragment">
+
+    <fragment
+        android:id="@+id/newsListFragment"
+        android:name="udayfionics.news.presentation.NewsListFragment"
+        android:label="NewsListFragment">
+        <action
+            android:id="@+id/actionToNewsDetailFragment"
+            app:destination="@id/newsDetailFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/newsDetailFragment"
+        android:name="udayfionics.news.presentation.NewsDetailFragment"
+        android:label="fragment_news_detail"
+        tools:layout="@layout/fragment_news_detail">
+        <argument
+            android:name="newsId"
+            android:defaultValue="0L"
+            app:argType="long" />
+    </fragment>
+</navigation>
