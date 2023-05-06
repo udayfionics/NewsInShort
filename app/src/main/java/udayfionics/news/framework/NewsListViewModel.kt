@@ -51,6 +51,7 @@ class NewsListViewModel(application: Application) : AndroidViewModel(application
                 .subscribeWith(object : DisposableSingleObserver<NewsRemote>() {
                     override fun onSuccess(remote: NewsRemote) {
                         storeNewsLocally(remote.data)
+                        Toast.makeText(getApplication(), "Fetched from Remote", Toast.LENGTH_LONG).show()
                     }
 
                     override fun onError(e: Throwable) {
@@ -82,6 +83,7 @@ class NewsListViewModel(application: Application) : AndroidViewModel(application
             val newsAll = useCases.getAllNews()
             newsLoaded(newsAll)
         }
+        Toast.makeText(getApplication(), "Fetched from Database", Toast.LENGTH_LONG).show()
     }
 
     private fun newsLoaded(newsAll: List<News>) {
