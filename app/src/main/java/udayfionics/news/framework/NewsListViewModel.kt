@@ -22,7 +22,8 @@ import udayfionics.news.framework.remote.NewsRemote
 
 class NewsListViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val coroutineScope = CoroutineScope(Dispatchers.IO)
+    private val coroutineScopeIO = CoroutineScope(Dispatchers.IO)
+    private val coroutineScopeMain = CoroutineScope(Dispatchers.Main)
 
     private val apiService = NewsApiService()
 
@@ -43,7 +44,6 @@ class NewsListViewModel(application: Application) : AndroidViewModel(application
     val error = MutableLiveData<Boolean>()
 
     fun refresh() {
-//        fetchFromDatabase()
         fetchFromRemote()
     }
 
@@ -56,7 +56,19 @@ class NewsListViewModel(application: Application) : AndroidViewModel(application
                 .subscribeWith(object : DisposableSingleObserver<NewsRemote>() {
                     override fun onSuccess(remote: NewsRemote) {
                         storeNewsLocally(remote.data)
-                        Toast.makeText(getApplication(), "Fetched from Remote", Toast.LENGTH_LONG).show()
+                        if (remote.data.isEmpty()) {
+                            Toast.makeText(
+                                getApplication(),
+                                "No data available, Please try again",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        } else {
+                            Toast.makeText(
+                                getApplication(),
+                                "Fetched from Remote",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
                     }
 
                     override fun onError(e: Throwable) {
@@ -70,7 +82,7 @@ class NewsListViewModel(application: Application) : AndroidViewModel(application
     }
 
     private fun storeNewsLocally(data: List<News>) {
-        coroutineScope.launch {
+        coroutineScopeIO.launch {
             useCases.deleteAllNews()
             val result = useCases.insertAllNews(*data.toTypedArray())
             var i = 0
@@ -84,16 +96,27 @@ class NewsListViewModel(application: Application) : AndroidViewModel(application
 
     fun fetchFromDatabase() {
         loading.value = true
-        coroutineScope.launch {
+        coroutineScopeIO.launch {
             val newsAll = useCases.getAllNews()
             newsLoaded(newsAll)
+            coroutineScopeMain.launch { fetchFromRemoteIfNoData() }
         }
-        Toast.makeText(getApplication(), "Fetched from Database", Toast.LENGTH_LONG).show()
+    }
+
+    private fun fetchFromRemoteIfNoData() {
+        if (newsList.value != null && newsList.value!!.isNotEmpty()) {
+            Toast.makeText(getApplication(), "Fetched from Database", Toast.LENGTH_LONG)
+                .show()
+        } else {
+            refresh()
+        }
     }
 
     private fun newsLoaded(newsAll: List<News>) {
-        newsList.postValue(newsAll)
-        loading.postValue(false)
-        error.postValue(false)
+        coroutineScopeMain.launch {
+            newsList.value = newsAll
+            loading.value = false
+            error.value = false
+        }
     }
 }

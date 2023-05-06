@@ -34,7 +34,7 @@ class NewsListFragment : Fragment(), NewsItemClick {
             adapter = listAdapter
         }
         observeViewModel()
-        viewModel.refresh()
+        viewModel.fetchFromDatabase()
     }
 
     private fun observeViewModel() {
@@ -43,13 +43,6 @@ class NewsListFragment : Fragment(), NewsItemClick {
             binding.loadingView.visibility = View.GONE
             binding.errorTextView.visibility = View.GONE
             listAdapter.updateList(it)
-            if (it.isEmpty()) {
-                Snackbar.make(
-                    binding.listView,
-                    "No data available, Please try again",
-                    Snackbar.LENGTH_LONG
-                ).show()
-            }
         })
         viewModel.loading.observe(viewLifecycleOwner, Observer {
             binding.loadingView.visibility = if (it) View.VISIBLE else View.GONE
