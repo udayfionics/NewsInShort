@@ -7,15 +7,16 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import udayfionics.news.databinding.FragmentNewsListBinding
 import udayfionics.news.framework.NewsListViewModel
 
-class NewsListFragment : Fragment() {
+class NewsListFragment : Fragment(), NewsItemClick {
     private lateinit var binding: FragmentNewsListBinding
     private lateinit var viewModel: NewsListViewModel
-    private val listAdapter = NewsListAdapter(arrayListOf())
+    private val listAdapter = NewsListAdapter(arrayListOf(), this)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -64,5 +65,11 @@ class NewsListFragment : Fragment() {
                 binding.listView.visibility = View.GONE
             }
         })
+    }
+
+    override fun onNewsItemClicked(id: Long) {
+        val action = NewsListFragmentDirections.actionToNewsDetailFragment()
+        action.newsId = id
+        Navigation.findNavController(binding.listView).navigate(action)
     }
 }

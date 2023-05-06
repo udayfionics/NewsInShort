@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import udayfionics.core.data.News
 import udayfionics.news.databinding.ItemNewsBinding
 
-class NewsListAdapter(private var list: ArrayList<News>) :
+class NewsListAdapter(private var list: ArrayList<News>, private val click: NewsItemClick) :
     Adapter<NewsListAdapter.NewsListViewHolder>() {
 
     fun updateList(newList: List<News>) {
@@ -33,6 +33,7 @@ class NewsListAdapter(private var list: ArrayList<News>) :
         fun bind(news: News) {
             binding.titleView.text = news.title
             binding.contentView.text = news.content
+            binding.root.setOnClickListener { click.onNewsItemClicked(news.uuid) }
         }
     }
 }
