@@ -1,7 +1,7 @@
 package udayfionics.news.framework.remote
 
 import io.reactivex.Single
-import udayfionics.news.framework.di.DaggerApiComponent
+import udayfionics.news.framework.di.api.DaggerApiComponent
 import javax.inject.Inject
 
 class NewsApiService {
