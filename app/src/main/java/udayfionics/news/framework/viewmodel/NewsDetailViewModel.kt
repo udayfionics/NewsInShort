@@ -3,18 +3,21 @@ package udayfionics.news.framework.viewmodel
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 import udayfionics.core.data.News
 import udayfionics.news.framework.UseCases
 import udayfionics.news.framework.di.ApplicationModule
 import udayfionics.news.framework.di.DaggerViewModelComponent
+import udayfionics.news.framework.di.dispatcher.IoDispatcher
 import javax.inject.Inject
 
 class NewsDetailViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val coroutineScopeIO = CoroutineScope(Dispatchers.IO)
+    @IoDispatcher
+    @Inject
+    lateinit var ioDispatcher: CoroutineDispatcher
 
     @Inject
     lateinit var useCases: UseCases
@@ -29,7 +32,7 @@ class NewsDetailViewModel(application: Application) : AndroidViewModel(applicati
     val news = MutableLiveData<News>()
 
     fun fetch(uuid: Long) {
-        coroutineScopeIO.launch {
+        viewModelScope.launch(ioDispatcher) {
             val newsInfo = useCases.getNews(uuid)
             news.postValue(newsInfo!!)
         }

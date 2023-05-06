@@ -4,25 +4,32 @@ import android.app.Application
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableSingleObserver
 import io.reactivex.schedulers.Schedulers
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 import udayfionics.core.data.News
 import udayfionics.news.framework.UseCases
 import udayfionics.news.framework.di.ApplicationModule
 import udayfionics.news.framework.di.DaggerViewModelComponent
+import udayfionics.news.framework.di.dispatcher.IoDispatcher
+import udayfionics.news.framework.di.dispatcher.MainDispatcher
 import udayfionics.news.framework.remote.NewsApiService
 import udayfionics.news.framework.remote.NewsRemote
 import javax.inject.Inject
 
 class NewsListViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val coroutineScopeIO = CoroutineScope(Dispatchers.IO)
-    private val coroutineScopeMain = CoroutineScope(Dispatchers.Main)
+    @IoDispatcher
+    @Inject
+    lateinit var ioDispatcher: CoroutineDispatcher
+
+    @MainDispatcher
+    @Inject
+    lateinit var mainDispatcher: CoroutineDispatcher
 
     @Inject
     lateinit var apiService: NewsApiService
@@ -82,7 +89,7 @@ class NewsListViewModel(application: Application) : AndroidViewModel(application
     }
 
     private fun storeNewsLocally(data: List<News>) {
-        coroutineScopeIO.launch {
+        viewModelScope.launch(ioDispatcher) {
             useCases.deleteAllNews()
             val result = useCases.insertAllNews(*data.toTypedArray())
             var i = 0
@@ -96,10 +103,10 @@ class NewsListViewModel(application: Application) : AndroidViewModel(application
 
     fun fetchFromDatabase() {
         loading.value = true
-        coroutineScopeIO.launch {
+        viewModelScope.launch(ioDispatcher) {
             val newsAll = useCases.getAllNews()
             newsLoaded(newsAll)
-            coroutineScopeMain.launch { fetchFromRemoteIfNoData() }
+            viewModelScope.launch(mainDispatcher) { fetchFromRemoteIfNoData() }
         }
     }
 
@@ -113,7 +120,7 @@ class NewsListViewModel(application: Application) : AndroidViewModel(application
     }
 
     private fun newsLoaded(newsAll: List<News>) {
-        coroutineScopeMain.launch {
+        viewModelScope.launch(mainDispatcher) {
             newsList.value = newsAll
             loading.value = false
             error.value = false
