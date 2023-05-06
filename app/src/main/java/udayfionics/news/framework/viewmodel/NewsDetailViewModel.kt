@@ -7,27 +7,24 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import udayfionics.core.data.News
-import udayfionics.core.repository.NewsRepository
-import udayfionics.core.usecase.DeleteAllNews
-import udayfionics.core.usecase.GetAllNews
-import udayfionics.core.usecase.GetNews
-import udayfionics.core.usecase.InsertAllNews
-import udayfionics.news.framework.RoomNewsDataSource
 import udayfionics.news.framework.UseCases
+import udayfionics.news.framework.di.ApplicationModule
+import udayfionics.news.framework.di.DaggerViewModelComponent
+import javax.inject.Inject
 
 class NewsDetailViewModel(application: Application) : AndroidViewModel(application) {
 
     private val coroutineScopeIO = CoroutineScope(Dispatchers.IO)
 
-    private val repository = NewsRepository(RoomNewsDataSource(application))
+    @Inject
+    lateinit var useCases: UseCases
 
-    private val useCases =
-        UseCases(
-            InsertAllNews(repository),
-            GetNews(repository),
-            GetAllNews(repository),
-            DeleteAllNews(repository)
-        )
+    init {
+        DaggerViewModelComponent.builder()
+            .applicationModule(ApplicationModule(application))
+            .build()
+            .inject(this)
+    }
 
     val news = MutableLiveData<News>()
 
