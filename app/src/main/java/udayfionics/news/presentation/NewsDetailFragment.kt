@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import udayfionics.news.databinding.FragmentNewsDetailBinding
-import udayfionics.news.framework.NewsDetailViewModel
+import udayfionics.news.framework.viewmodel.NewsDetailViewModel
 import udayfionics.news.util.getProgressDrawable
 import udayfionics.news.util.loadImage
 

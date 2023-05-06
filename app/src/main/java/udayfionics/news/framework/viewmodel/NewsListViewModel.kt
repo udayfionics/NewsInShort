@@ -1,4 +1,4 @@
-package udayfionics.news.framework
+package udayfionics.news.framework.viewmodel
 
 import android.app.Application
 import android.widget.Toast
@@ -17,6 +17,8 @@ import udayfionics.core.usecase.DeleteAllNews
 import udayfionics.core.usecase.GetAllNews
 import udayfionics.core.usecase.GetNews
 import udayfionics.core.usecase.InsertAllNews
+import udayfionics.news.framework.RoomNewsDataSource
+import udayfionics.news.framework.UseCases
 import udayfionics.news.framework.remote.NewsApiService
 import udayfionics.news.framework.remote.NewsRemote
 

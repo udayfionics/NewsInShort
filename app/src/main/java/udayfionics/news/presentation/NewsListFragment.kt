@@ -12,7 +12,7 @@ import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import udayfionics.news.R
 import udayfionics.news.databinding.FragmentNewsListBinding
-import udayfionics.news.framework.NewsListViewModel
+import udayfionics.news.framework.viewmodel.NewsListViewModel
 
 class NewsListFragment : Fragment(), NewsItemClick {
     private lateinit var binding: FragmentNewsListBinding

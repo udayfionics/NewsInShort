@@ -1,4 +1,4 @@
-package udayfionics.news.framework
+package udayfionics.news.framework.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
@@ -12,6 +12,8 @@ import udayfionics.core.usecase.DeleteAllNews
 import udayfionics.core.usecase.GetAllNews
 import udayfionics.core.usecase.GetNews
 import udayfionics.core.usecase.InsertAllNews
+import udayfionics.news.framework.RoomNewsDataSource
+import udayfionics.news.framework.UseCases
 
 class NewsDetailViewModel(application: Application) : AndroidViewModel(application) {
 
