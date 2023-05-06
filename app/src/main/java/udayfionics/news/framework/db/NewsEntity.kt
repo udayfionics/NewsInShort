@@ -12,11 +12,11 @@ data class NewsEntity(
     @ColumnInfo(name = "image_url")
     var imageUrl: String,
     @PrimaryKey(autoGenerate = true)
-    var id: Long = 0
+    var uuid: Long = 0
 ) {
     companion object {
-        fun fromNews(news: News) = NewsEntity(news.title, news.content, news.imageUrl, news.id)
+        fun fromNews(news: News) = NewsEntity(news.title, news.content, news.imageUrl, news.uuid)
     }
 
-    fun toNews() = News(title, content, imageUrl, id)
+    fun toNews() = News(title, content, imageUrl, uuid)
 }
