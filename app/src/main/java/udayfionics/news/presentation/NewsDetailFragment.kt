@@ -9,6 +9,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import udayfionics.news.databinding.FragmentNewsDetailBinding
 import udayfionics.news.framework.NewsDetailViewModel
+import udayfionics.news.util.getProgressDrawable
+import udayfionics.news.util.loadImage
 
 class NewsDetailFragment : Fragment() {
     private lateinit var binding: FragmentNewsDetailBinding
@@ -40,6 +42,10 @@ class NewsDetailFragment : Fragment() {
             it?.let {
                 binding.titleView.text = it.title
                 binding.contentView.text = it.content
+                binding.imageView.loadImage(
+                    it.imageUrl,
+                    getProgressDrawable(binding.imageView.context)
+                )
             }
         })
     }

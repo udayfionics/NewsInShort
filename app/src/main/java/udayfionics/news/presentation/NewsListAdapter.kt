@@ -6,6 +6,8 @@ import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import udayfionics.core.data.News
 import udayfionics.news.databinding.ItemNewsBinding
+import udayfionics.news.util.getProgressDrawable
+import udayfionics.news.util.loadImage
 
 class NewsListAdapter(private var list: ArrayList<News>, private val click: NewsItemClick) :
     Adapter<NewsListAdapter.NewsListViewHolder>() {
@@ -34,6 +36,10 @@ class NewsListAdapter(private var list: ArrayList<News>, private val click: News
             binding.titleView.text = news.title
             binding.contentView.text = news.content
             binding.root.setOnClickListener { click.onNewsItemClicked(news.uuid) }
+            binding.imageView.loadImage(
+                news.imageUrl,
+                getProgressDrawable(binding.imageView.context)
+            )
         }
     }
 }
