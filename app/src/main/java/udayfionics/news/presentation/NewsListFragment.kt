@@ -1,15 +1,16 @@
 package udayfionics.news.presentation
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.snackbar.Snackbar
+import udayfionics.news.R
 import udayfionics.news.databinding.FragmentNewsListBinding
 import udayfionics.news.framework.NewsListViewModel
 
@@ -28,6 +29,8 @@ class NewsListFragment : Fragment(), NewsItemClick {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setUpMenu()
+
         viewModel = ViewModelProvider(this)[NewsListViewModel::class.java]
         binding.listView.apply {
             layoutManager = LinearLayoutManager(context)
@@ -64,5 +67,26 @@ class NewsListFragment : Fragment(), NewsItemClick {
         val action = NewsListFragmentDirections.actionToNewsDetailFragment()
         action.newsId = id
         Navigation.findNavController(binding.listView).navigate(action)
+    }
+
+    private fun setUpMenu() {
+        (requireActivity() as MenuHost).addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.list_menu, menu)
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                when (menuItem.itemId) {
+                    R.id.menuActionRefresh -> {
+                        view?.let {
+                            viewModel.refresh()
+                        }
+                        return true
+                    }
+                }
+                return false
+            }
+
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 }
