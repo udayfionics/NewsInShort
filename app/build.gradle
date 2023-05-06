@@ -51,7 +51,7 @@ dependencies {
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
 
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycleExtensionsVersion"
 
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$corountines_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$corountines_version"
@@ -76,6 +76,8 @@ dependencies {
     implementation "io.reactivex.rxjava2:rxandroid:$rxandroid_version"
     implementation "io.reactivex.rxjava2:rxkotlin:$rxkotlin_version"
 
+    testImplementation "org.mockito:mockito-inline:$mockitoInlineVersion"
+    testImplementation "androidx.arch.core:core-testing:$lifecycleExtensionsVersion"
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
