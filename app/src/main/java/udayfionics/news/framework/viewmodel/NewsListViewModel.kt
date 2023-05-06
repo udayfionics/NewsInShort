@@ -49,6 +49,7 @@ class NewsListViewModel(application: Application) : AndroidViewModel(application
     val newsList = MutableLiveData<List<News>>()
     val loading = MutableLiveData<Boolean>()
     val error = MutableLiveData<Boolean>()
+    val toastMessage = MutableLiveData<String>()
 
     fun refresh() {
         fetchFromRemote()
@@ -64,24 +65,16 @@ class NewsListViewModel(application: Application) : AndroidViewModel(application
                     override fun onSuccess(remote: NewsRemote) {
                         storeNewsLocally(remote.data)
                         if (remote.data.isEmpty()) {
-                            Toast.makeText(
-                                getApplication(),
-                                "No data available, Please try again",
-                                Toast.LENGTH_LONG
-                            ).show()
+                            toastMessage.value = "No data available, Please try again"
                         } else {
-                            Toast.makeText(
-                                getApplication(),
-                                "Fetched from Remote",
-                                Toast.LENGTH_LONG
-                            ).show()
+                            toastMessage.value = "Fetched from Remote"
                         }
                     }
 
                     override fun onError(e: Throwable) {
                         error.value = true
                         loading.value = false
-                        Toast.makeText(getApplication(), e.message, Toast.LENGTH_LONG).show()
+                        toastMessage.value = e.message
                         e.printStackTrace()
                     }
                 })
@@ -112,8 +105,7 @@ class NewsListViewModel(application: Application) : AndroidViewModel(application
 
     private fun fetchFromRemoteIfNoData() {
         if (newsList.value != null && newsList.value!!.isNotEmpty()) {
-            Toast.makeText(getApplication(), "Fetched from Database", Toast.LENGTH_LONG)
-                .show()
+            toastMessage.value = "Fetched from Database"
         } else {
             refresh()
         }

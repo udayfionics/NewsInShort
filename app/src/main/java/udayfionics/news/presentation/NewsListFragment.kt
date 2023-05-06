@@ -2,6 +2,7 @@ package udayfionics.news.presentation
 
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
@@ -59,6 +60,11 @@ class NewsListFragment : Fragment(), NewsItemClick {
             if (it) {
                 binding.loadingView.visibility = View.GONE
                 binding.listView.visibility = View.GONE
+            }
+        })
+        viewModel.toastMessage.observe(viewLifecycleOwner, Observer {
+            if (it != null && it.isNotEmpty()) {
+                Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
             }
         })
     }
