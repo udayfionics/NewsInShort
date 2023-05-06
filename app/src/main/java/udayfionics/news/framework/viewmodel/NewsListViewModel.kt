@@ -1,7 +1,6 @@
 package udayfionics.news.framework.viewmodel
 
 import android.app.Application
-import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -64,6 +63,7 @@ class NewsListViewModel(application: Application) : AndroidViewModel(application
                 .subscribeWith(object : DisposableSingleObserver<NewsRemote>() {
                     override fun onSuccess(remote: NewsRemote) {
                         storeNewsLocally(remote.data)
+                        newsLoaded(remote.data)
                         if (remote.data.isEmpty()) {
                             toastMessage.value = "No data available, Please try again"
                         } else {
@@ -72,6 +72,7 @@ class NewsListViewModel(application: Application) : AndroidViewModel(application
                     }
 
                     override fun onError(e: Throwable) {
+                        newsList.value = arrayListOf()
                         error.value = true
                         loading.value = false
                         toastMessage.value = e.message
@@ -90,7 +91,6 @@ class NewsListViewModel(application: Application) : AndroidViewModel(application
                 data[i].uuid = result[i]
                 ++i
             }
-            newsLoaded(data)
         }
     }
 
@@ -98,8 +98,10 @@ class NewsListViewModel(application: Application) : AndroidViewModel(application
         loading.value = true
         viewModelScope.launch(ioDispatcher) {
             val newsAll = useCases.getAllNews()
-            newsLoaded(newsAll)
-            viewModelScope.launch(mainDispatcher) { fetchFromRemoteIfNoData() }
+            viewModelScope.launch(mainDispatcher) {
+                newsLoaded(newsAll)
+                fetchFromRemoteIfNoData()
+            }
         }
     }
 
@@ -112,10 +114,8 @@ class NewsListViewModel(application: Application) : AndroidViewModel(application
     }
 
     private fun newsLoaded(newsAll: List<News>) {
-        viewModelScope.launch(mainDispatcher) {
-            newsList.value = newsAll
-            loading.value = false
-            error.value = false
-        }
+        newsList.value = newsAll
+        loading.value = false
+        error.value = false
     }
 }
