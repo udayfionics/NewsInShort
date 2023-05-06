@@ -1,9 +1,7 @@
-package udayfionics.news.framework.di
+package udayfionics.news.framework.di.api
 
 import dagger.Component
 import udayfionics.news.framework.remote.NewsApiService
-import udayfionics.news.framework.viewmodel.NewsDetailViewModel
-import udayfionics.news.framework.viewmodel.NewsListViewModel
 
 @Component(modules = [ApiModule::class, ApiServiceModule::class])
 interface ApiComponent {

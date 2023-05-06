@@ -1,4 +1,4 @@
-package udayfionics.news.framework.di
+package udayfionics.news.framework.di.api
 
 import dagger.Module
 import dagger.Provides
