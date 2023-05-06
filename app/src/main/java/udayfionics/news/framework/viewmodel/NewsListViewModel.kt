@@ -24,7 +24,8 @@ class NewsListViewModel(application: Application) : AndroidViewModel(application
     private val coroutineScopeIO = CoroutineScope(Dispatchers.IO)
     private val coroutineScopeMain = CoroutineScope(Dispatchers.Main)
 
-    private val apiService = NewsApiService()
+    @Inject
+    lateinit var apiService: NewsApiService
 
     private val disposable = CompositeDisposable()
 
