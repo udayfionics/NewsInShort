@@ -11,7 +11,7 @@ class RoomNewsDataSource(context: Context) : NewsDataSource {
     override suspend fun insertAllNews(vararg news: News) =
         newsDao.insertAllNewsEntities(*news.asList().map { NewsEntity.fromNews(it) }.toTypedArray())
 
-    override suspend fun get(id: Long): News? = newsDao.getNewsEntity(id).toNews()
+    override suspend fun get(uuid: Long): News = newsDao.getNewsEntity(uuid).toNews()
 
     override suspend fun getAll(): List<News> = newsDao.getAllNewsEntities().map { it.toNews() }
 
