@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/newsListFragment"
         android:name="udayfionics.news.presentation.NewsListFragment"
-        android:label="NewsListFragment">
+        android:label="News from In short(Github)">
         <action
             android:id="@+id/actionToNewsDetailFragment"
             app:destination="@id/newsDetailFragment"
@@ -19,7 +19,7 @@
     <fragment
         android:id="@+id/newsDetailFragment"
         android:name="udayfionics.news.presentation.NewsDetailFragment"
-        android:label="fragment_news_detail"
+        android:label="Details"
         tools:layout="@layout/fragment_news_detail">
         <argument
             android:name="newsId"
