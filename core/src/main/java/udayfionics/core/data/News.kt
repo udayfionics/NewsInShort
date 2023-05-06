@@ -4,5 +4,5 @@ data class News(
     var title: String,
     var content: String,
     var imageUrl: String,
-    var id: Long = 0
+    var uuid: Long = 0
 )
