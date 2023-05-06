@@ -31,7 +31,12 @@ class NewsListViewModel(application: Application) : AndroidViewModel(application
     private val repository = NewsRepository(RoomNewsDataSource(application))
 
     private val useCases =
-        UseCases(InsertAllNews(repository), GetNews(repository), GetAllNews(repository), DeleteAllNews(repository))
+        UseCases(
+            InsertAllNews(repository),
+            GetNews(repository),
+            GetAllNews(repository),
+            DeleteAllNews(repository)
+        )
 
     val newsList = MutableLiveData<List<News>>()
     val loading = MutableLiveData<Boolean>()
